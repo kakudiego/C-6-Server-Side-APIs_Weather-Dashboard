@@ -8,11 +8,20 @@ var city = "cochabamba";
 var oneDay = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial" + "&appid=61763921a1722d721341f9896cdced9f";
 var fiveDays = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial" + "&appid=61763921a1722d721341f9896cdced9f";
 
+var uvi = "https://api.openweathermap.org/data/2.5/onecall?lat=-17.3895&lon=-66.1568&exclude=minutely,hourly&appid=61763921a1722d721341f9896cdced9f";
+// var uvIndex = (lat + lon)
+
 var getWeather = function (city) {
   fetch(oneDay).then(function (response) {
     if (response.ok) {
       response.json().then(function (data) {
         console.log(data);
+        console.log("temp = " + data.main.temp);
+        console.log("humidity = " + data.main.humidity);
+        console.log("UV Index = " + data.main.humidity);
+        console.log("wind = " + data.wind.speed);
+        console.log("lat = " + data.coord.lat);
+        console.log("lon = " + data.coord.lon);
       });
     }
   });
@@ -27,6 +36,16 @@ var getWeather = function (city) {
   });
 };
 getWeather();
+
+// UVI section
+var getUVI = function () {
+  fetch(uvi).then(function (response) {
+    response.json().then(function (data) {
+      console.log(data);
+    });
+  });
+};
+getUVI();
 
 // display day and time
 // prototype - first time using
