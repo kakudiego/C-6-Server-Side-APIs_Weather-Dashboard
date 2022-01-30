@@ -1,0 +1,11 @@
+.btn:hover {
+  transform: scale(0.95);
+}
+
+header {
+  text-align: center;
+}
+
+#busca {
+  text-align: center;
+}
