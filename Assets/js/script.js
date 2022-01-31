@@ -80,7 +80,15 @@ $("#day6").text(date.addDays(5).toLocaleDateString("en-US"));
 let saveBtn = document.querySelector("#searchbtn");
 let searchCity = document.querySelector("#search");
 
-searchCity.value = JSON.parse(localStorage.getItem("city"));
+// select ul to display search history
+let historyList = document.querySelector("#historyList");
+let historyListItem = document.createElement("button");
+historyListItem.id = "cityList";
+historyListItem.setAttribute("class", "btn btn-light");
+historyListItem.innerText = JSON.parse(localStorage.getItem("city")); // get the data from local storage, key: city
+historyList.appendChild(historyListItem);
+
+// searchCity.value = JSON.parse(localStorage.getItem("city"));
 
 saveBtn.addEventListener("click", function (event) {
   event.preventDefault();
@@ -97,6 +105,7 @@ $("#search").keypress(function (event) {
 // delete task button
 // input empty
 function deleteCity() {
-  localStorage.removeItem("city");
+  localStorage.removeItem("city"); // just the key: city
   searchCity.value = "";
+  location.reload();
 }

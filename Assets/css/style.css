@@ -11,3 +11,11 @@ div {
   text-align: center;
   align-items: center;
 }
+
+#cityList {
+  font-size: 20px;
+}
+
+#search {
+  margin: 10px 0;
+}
