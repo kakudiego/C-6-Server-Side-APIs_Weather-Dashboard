@@ -13,6 +13,7 @@ $(document).ready(function () {
 // select search section
 var saveBtn = document.querySelector("#searchbtn");
 var searchCity = document.querySelector("#search");
+var cityList = document.querySelector("#cityList");
 
 // select ul to display search history
 var historyList = document.querySelector("#historyList");
@@ -27,21 +28,48 @@ var oneDay = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&uni
 var uvi = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly&appid=61763921a1722d721341f9896cdced9f";
 var fiveDays = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial" + "&appid=61763921a1722d721341f9896cdced9f";
 
+// UVI section
+var getUVI = function () {
+  fetch(uvi).then(function (response) {
+    response.json().then(function (data) {
+      // localStorage.setItem("uvi", JSON.stringify(data.current.uvi));
+
+      $("#day0uvi").text("UV Index: " + data.current.uvi);
+
+      // console.log("UVI log", data);
+      console.log("UV Index = " + data.current.uvi);
+    });
+  });
+};
+
 var getWeather = function () {
   fetch(oneDay)
     .then(function (response) {
       if (response.ok) {
         response.json().then(function (data) {
-          localStorage.setItem("lat", JSON.stringify(data.coord.lat));
-          localStorage.setItem("lon", JSON.stringify(data.coord.lon));
-          localStorage.setItem("city", JSON.stringify(data.name));
-          localStorage.setItem("country", JSON.stringify(data.sys.country));
-          localStorage.setItem("day0temp", JSON.stringify(data.main.temp));
-          localStorage.setItem("day0humidity", JSON.stringify(data.main.humidity));
-          localStorage.setItem("day0wind", JSON.stringify(data.wind.speed));
+          // localStorage.setItem("lat", JSON.stringify(data.coord.lat));
+          // localStorage.setItem("lon", JSON.stringify(data.coord.lon));
+          // localStorage.setItem("city", JSON.stringify(data.name));
+          // localStorage.setItem("day0weather", JSON.stringify(data));
+          // localStorage.setItem("country", JSON.stringify(data.sys.country));
+          // localStorage.setItem("day0temp", JSON.stringify(data.main.temp));
+          // localStorage.setItem("day0humidity", JSON.stringify(data.main.humidity));
+          // localStorage.setItem("day0wind", JSON.stringify(data.wind.speed));
+          // localStorage.setItem("day0icon", JSON.stringify(data.weather[0].icon));
 
-          // console.log("today weather", data);
-          // console.log("weather icon = " + data.weather[0].icon);
+          // print weather for today
+          $(".city").text(data.name + ", " + data.sys.country);
+          $("#description").text(data.weather[0].description);
+          $("#day0temp").text("Temp: " + data.main.temp + " \u00B0F");
+          $("#day0humidity").text("Humidity: " + data.main.humidity + "%");
+          $("#day0wind").text("Wind: " + data.wind.speed + " MPH");
+
+          // add weather icon today
+          $("#day0icon").attr("src", "https://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png");
+
+          // // all my console.log to find the data
+          console.log("today weather", data);
+          // console.log("day0icon = " + data.weather[0].icon);
           // console.log("city = " + data.name);
           // console.log("country = " + data.sys.country);
           // console.log("temp = " + data.main.temp + " F");
@@ -62,27 +90,58 @@ var getWeather = function () {
 var nextFive = function (city) {
   fetch(fiveDays).then(function (response) {
     response.json().then(function (data) {
-      localStorage.setItem("day1temp", JSON.stringify(data.list[0].main.temp));
-      localStorage.setItem("day1humidity", JSON.stringify(data.list[0].main.humidity));
-      localStorage.setItem("day1wind", JSON.stringify(data.list[0].wind.speed));
+      // // save local storage
+      // localStorage.setItem("day1temp", JSON.stringify(data.list[0].main.temp));
+      // localStorage.setItem("day1humidity", JSON.stringify(data.list[0].main.humidity));
+      // localStorage.setItem("day1wind", JSON.stringify(data.list[0].wind.speed));
 
-      localStorage.setItem("day2temp", JSON.stringify(data.list[1].main.temp));
-      localStorage.setItem("day2humidity", JSON.stringify(data.list[1].main.humidity));
-      localStorage.setItem("day2wind", JSON.stringify(data.list[1].wind.speed));
+      // localStorage.setItem("day2temp", JSON.stringify(data.list[1].main.temp));
+      // localStorage.setItem("day2humidity", JSON.stringify(data.list[1].main.humidity));
+      // localStorage.setItem("day2wind", JSON.stringify(data.list[1].wind.speed));
 
-      localStorage.setItem("day3temp", JSON.stringify(data.list[2].main.temp));
-      localStorage.setItem("day3humidity", JSON.stringify(data.list[2].main.humidity));
-      localStorage.setItem("day3wind", JSON.stringify(data.list[2].wind.speed));
+      // localStorage.setItem("day3temp", JSON.stringify(data.list[2].main.temp));
+      // localStorage.setItem("day3humidity", JSON.stringify(data.list[2].main.humidity));
+      // localStorage.setItem("day3wind", JSON.stringify(data.list[2].wind.speed));
 
-      localStorage.setItem("day4temp", JSON.stringify(data.list[3].main.temp));
-      localStorage.setItem("day4humidity", JSON.stringify(data.list[3].main.humidity));
-      localStorage.setItem("day4wind", JSON.stringify(data.list[3].wind.speed));
+      // localStorage.setItem("day4temp", JSON.stringify(data.list[3].main.temp));
+      // localStorage.setItem("day4humidity", JSON.stringify(data.list[3].main.humidity));
+      // localStorage.setItem("day4wind", JSON.stringify(data.list[3].wind.speed));
 
-      localStorage.setItem("day5temp", JSON.stringify(data.list[4].main.temp));
-      localStorage.setItem("day5humidity", JSON.stringify(data.list[4].main.humidity));
-      localStorage.setItem("day5wind", JSON.stringify(data.list[4].wind.speed));
+      // localStorage.setItem("day5temp", JSON.stringify(data.list[4].main.temp));
+      // localStorage.setItem("day5humidity", JSON.stringify(data.list[4].main.humidity));
+      // localStorage.setItem("day5wind", JSON.stringify(data.list[4].wind.speed));
 
+      // add weather icon 5 days
+      $("#day1icon").attr("src", "https://openweathermap.org/img/wn/" + data.list[0].weather[0].icon + "@2x.png");
+      $("#day2icon").attr("src", "https://openweathermap.org/img/wn/" + data.list[1].weather[0].icon + "@2x.png");
+      $("#day3icon").attr("src", "https://openweathermap.org/img/wn/" + data.list[2].weather[0].icon + "@2x.png");
+      $("#day4icon").attr("src", "https://openweathermap.org/img/wn/" + data.list[3].weather[0].icon + "@2x.png");
+      $("#day5icon").attr("src", "https://openweathermap.org/img/wn/" + data.list[4].weather[0].icon + "@2x.png");
+
+      // print weather next 5 days
+      $("#day1temp").text("Temp: " + data.list[0].main.temp + " \u00B0F");
+      $("#day1humidity").text("Humidity: " + data.list[0].main.humidity + "%");
+      $("#day1wind").text("Wind: " + data.list[0].wind.speed + " MPH");
+
+      $("#day2temp").text("Temp: " + data.list[1].main.temp + " \u00B0F");
+      $("#day2humidity").text("Humidity: " + data.list[1].main.humidity + "%");
+      $("#day2wind").text("Wind: " + data.list[1].wind.speed + " MPH");
+
+      $("#day3temp").text("Temp: " + data.list[2].main.temp + " \u00B0F");
+      $("#day3humidity").text("Humidity: " + data.list[2].main.humidity + "%");
+      $("#day3wind").text("Wind: " + data.list[2].wind.speed + " MPH");
+
+      $("#day4temp").text("Temp: " + data.list[3].main.temp + " \u00B0F");
+      $("#day4humidity").text("Humidity: " + data.list[3].main.humidity + "%");
+      $("#day4wind").text("Wind: " + data.list[3].wind.speed + " MPH");
+
+      $("#day5temp").text("Temp: " + data.list[4].main.temp + " \u00B0F");
+      $("#day5humidity").text("Humidity: " + data.list[4].main.humidity + "%");
+      $("#day5wind").text("Wind: " + data.list[4].wind.speed + " MPH");
+
+      // // all my console.log to find the data
       // console.log("5 days", data);
+      // console.log("day1icon = " + data.list[0].weather[0].icon);
       // console.log("day1 temp = " + data.list[0].main.temp + "F");
       // console.log("day1 humidity = " + data.list[0].main.humidity + "%");
       // console.log("day1 wind = " + data.list[0].wind.speed + " MPH");
@@ -103,7 +162,7 @@ Date.prototype.addDays = function (days) {
 };
 
 // select/set day, today and next 5 days
-$("#day0").text(date.addDays(0).toLocaleDateString("en-US"));
+$("#day0").text("Today is: " + date.addDays(0).toLocaleDateString("en-US"));
 $("#day1").text(date.addDays(1).toLocaleDateString("en-US"));
 $("#day2").text(date.addDays(2).toLocaleDateString("en-US"));
 $("#day3").text(date.addDays(3).toLocaleDateString("en-US"));
@@ -119,7 +178,6 @@ saveBtn.addEventListener("click", function (event) {
   localStorage.setItem("city", JSON.stringify(searchCity.value));
   getWeather();
   nextFive();
-  getWeather();
   getUVI();
 
   location.reload();
@@ -153,48 +211,38 @@ historyListItem.id = "cityList";
 historyListItem.setAttribute("class", "btn btn-light");
 historyListItem.innerText = JSON.parse(localStorage.getItem("city")); // get the data from local storage, key: city
 historyList.appendChild(historyListItem);
+// cityList.addEventListener("click", function () {
+//   // search the city again
+// });
 
-// print information
-$(".city").text(JSON.parse(localStorage.getItem("city")) + ", " + JSON.parse(localStorage.getItem("country")));
-$("#day0temp").text("Temp: " + JSON.parse(localStorage.getItem("day0temp")) + " \u00B0F");
-$("#day0humidity").text("Humidity: " + JSON.parse(localStorage.getItem("day0humidity")) + "%");
-$("#day0wind").text("Wind: " + JSON.parse(localStorage.getItem("day0wind")) + " MPH");
-$("#day0uvi").text("UV Index: " + JSON.parse(localStorage.getItem("uvi")));
+// // print information OLD VERSION
+// $(".city").text(JSON.parse(localStorage.getItem("city")) + ", " + JSON.parse(localStorage.getItem("country")));
+// $("#day0temp").text("Temp: " + JSON.parse(localStorage.getItem("day0temp")) + " \u00B0F");
+// $("#day0humidity").text("Humidity: " + JSON.parse(localStorage.getItem("day0humidity")) + "%");
+// $("#day0wind").text("Wind: " + JSON.parse(localStorage.getItem("day0wind")) + " MPH");
+// $("#day0uvi").text("UV Index: " + JSON.parse(localStorage.getItem("uvi")));
 
 // next 5 days
-$("#day1temp").text("Temp: " + JSON.parse(localStorage.getItem("day1temp")) + " \u00B0F");
-$("#day1humidity").text("Humidity: " + JSON.parse(localStorage.getItem("day1humidity")) + "%");
-$("#day1wind").text("Wind: " + JSON.parse(localStorage.getItem("day1wind")) + " MPH");
+// $("#day1temp").text("Temp: " + JSON.parse(localStorage.getItem("day1temp")) + " \u00B0F");
+// $("#day1humidity").text("Humidity: " + JSON.parse(localStorage.getItem("day1humidity")) + "%");
+// $("#day1wind").text("Wind: " + JSON.parse(localStorage.getItem("day1wind")) + " MPH");
 
-$("#day2temp").text("Temp: " + JSON.parse(localStorage.getItem("day2temp")) + " \u00B0F");
-$("#day2humidity").text("Humidity: " + JSON.parse(localStorage.getItem("day2humidity")) + "%");
-$("#day2wind").text("Wind: " + JSON.parse(localStorage.getItem("day2wind")) + " MPH");
+// $("#day2temp").text("Temp: " + JSON.parse(localStorage.getItem("day2temp")) + " \u00B0F");
+// $("#day2humidity").text("Humidity: " + JSON.parse(localStorage.getItem("day2humidity")) + "%");
+// $("#day2wind").text("Wind: " + JSON.parse(localStorage.getItem("day2wind")) + " MPH");
 
-$("#day3temp").text("Temp: " + JSON.parse(localStorage.getItem("day3temp")) + " \u00B0F");
-$("#day3humidity").text("Humidity: " + JSON.parse(localStorage.getItem("day3humidity")) + "%");
-$("#day3wind").text("Wind: " + JSON.parse(localStorage.getItem("day3wind")) + " MPH");
+// $("#day3temp").text("Temp: " + JSON.parse(localStorage.getItem("day3temp")) + " \u00B0F");
+// $("#day3humidity").text("Humidity: " + JSON.parse(localStorage.getItem("day3humidity")) + "%");
+// $("#day3wind").text("Wind: " + JSON.parse(localStorage.getItem("day3wind")) + " MPH");
 
-$("#day4temp").text("Temp: " + JSON.parse(localStorage.getItem("day4temp")) + " \u00B0F");
-$("#day4humidity").text("Humidity: " + JSON.parse(localStorage.getItem("day4humidity")) + "%");
-$("#day4wind").text("Wind: " + JSON.parse(localStorage.getItem("day4wind")) + " MPH");
+// $("#day4temp").text("Temp: " + JSON.parse(localStorage.getItem("day4temp")) + " \u00B0F");
+// $("#day4humidity").text("Humidity: " + JSON.parse(localStorage.getItem("day4humidity")) + "%");
+// $("#day4wind").text("Wind: " + JSON.parse(localStorage.getItem("day4wind")) + " MPH");
 
-$("#day5temp").text("Temp: " + JSON.parse(localStorage.getItem("day5temp")) + " \u00B0F");
-$("#day5humidity").text("Humidity: " + JSON.parse(localStorage.getItem("day5humidity")) + "%");
-$("#day5wind").text("Wind: " + JSON.parse(localStorage.getItem("day5wind")) + " MPH");
-
-// UVI section
-var getUVI = function () {
-  fetch(uvi).then(function (response) {
-    response.json().then(function (data) {
-      localStorage.setItem("uvi", JSON.stringify(data.current.uvi));
-
-      console.log("UV Index = " + data.current.uvi);
-      // console.log("UVI log", data);
-    });
-  });
-};
+// $("#day5temp").text("Temp: " + JSON.parse(localStorage.getItem("day5temp")) + " \u00B0F");
+// $("#day5humidity").text("Humidity: " + JSON.parse(localStorage.getItem("day5humidity")) + "%");
+// $("#day5wind").text("Wind: " + JSON.parse(localStorage.getItem("day5wind")) + " MPH");
 
 getWeather();
 nextFive();
-getWeather();
 getUVI();
