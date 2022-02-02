@@ -19,3 +19,43 @@ div {
 #search {
   margin: 10px 0;
 }
+
+#busca {
+  align-items: flex-start;
+}
+
+.green {
+  display: inline;
+  margin: 5px;
+  padding: 5px;
+  background-color: green;
+  color: white;
+}
+.yellow {
+  display: inline;
+  margin: 5px;
+  padding: 5px;
+  background-color: yellow;
+}
+.orange {
+  display: inline;
+  margin: 5px;
+  padding: 5px;
+  background-color: orange;
+}
+.red {
+  display: inline;
+  margin: 5px;
+  padding: 5px;
+  background-color: red;
+}
+.violet {
+  display: inline;
+  margin: 5px;
+  padding: 5px;
+  background-color: violet;
+}
+
+#before5 {
+  margin-bottom: 10px;
+}

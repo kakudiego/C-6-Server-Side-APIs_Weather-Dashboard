@@ -14,21 +14,22 @@ $(document).ready(function () {
 var saveBtn = document.querySelector("#searchbtn");
 var searchCity = document.querySelector("#search");
 var cityList = document.querySelector("#cityList");
+var searchHistory = [];
 
 // select ul to display search history
 var historyList = document.querySelector("#historyList");
-var historyListItem = document.createElement("button");
+// var historyListItem = document.createElement("button");
 
 // get the item from local storage and later use it to fetch city and uvi
 var city = JSON.parse(localStorage.getItem("city"));
-var lat = JSON.parse(localStorage.getItem("lat"));
-var lon = JSON.parse(localStorage.getItem("lon"));
+// var lat = JSON.parse(localStorage.getItem("lat"));
+// var lon = JSON.parse(localStorage.getItem("lon"));
 
 var oneDay = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial" + "&appid=61763921a1722d721341f9896cdced9f";
 var fiveDays = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial" + "&appid=61763921a1722d721341f9896cdced9f";
 
 // UVI section
-// function call inside getWeather function
+// function using 2 parameters, call inside getWeather function
 var getUVI = function (lat, lon) {
   var uvi = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly&appid=61763921a1722d721341f9896cdced9f";
 
@@ -38,8 +39,28 @@ var getUVI = function (lat, lon) {
 
       $("#day0uvi").text("UV Index: " + data.current.uvi);
 
+      // UV Index color
+      // parseInt the current uvi and compare to uvi warning colors, add class and change background color
+      let currentUVI = parseInt(data.current.uvi);
+      if (currentUVI <= 2) {
+        $("#day0uvi").addClass("green");
+      }
+      if (currentUVI >= 3 && currentUVI <= 5) {
+        $("#day0uvi").addClass("yellow");
+      }
+      if (currentUVI >= 6 && currentUVI <= 7) {
+        $("#day0uvi").addClass("orange");
+      }
+      if (currentUVI >= 8 && currentUVI <= 10) {
+        $("#day0uvi").addClass("red");
+      }
+      if (currentUVI >= 11) {
+        $("#day0uvi").addClass("violet");
+      }
+
+      // console.log(currentUVI);
       // console.log("UVI log", data);
-      console.log("UV Index = " + data.current.uvi);
+      // console.log("UV Index = " + data.current.uvi);
     });
   });
 };
@@ -73,7 +94,7 @@ var getWeather = function () {
           $("#day0icon").attr("src", "https://openweathermap.org/img/wn/" + data.weather[0].icon + "@2x.png");
 
           // // all my console.log to find the data
-          console.log("today weather", data);
+          // console.log("today weather", data);
           // console.log("day0icon = " + data.weather[0].icon);
           // console.log("city = " + data.name);
           // console.log("country = " + data.sys.country);
@@ -156,7 +177,6 @@ var nextFive = function (city) {
 };
 
 //
-//
 // display day and time
 // prototype - first time using
 var date = new Date();
@@ -174,14 +194,18 @@ $("#day2").text(date.addDays(2).toLocaleDateString("en-US"));
 $("#day3").text(date.addDays(3).toLocaleDateString("en-US"));
 $("#day4").text(date.addDays(4).toLocaleDateString("en-US"));
 $("#day5").text(date.addDays(5).toLocaleDateString("en-US"));
+//
 
 //
-//
+
 // Local Storage section
 // keep data after refresh page
+var cityArray = [];
+
 saveBtn.addEventListener("click", function (event) {
   event.preventDefault();
   localStorage.setItem("city", JSON.stringify(searchCity.value));
+
   location.reload();
 });
 
@@ -209,13 +233,10 @@ function deleteCity() {
 }
 
 // add search history as clickable button
-historyListItem.id = "cityList";
-historyListItem.setAttribute("class", "btn btn-light");
-historyListItem.innerText = JSON.parse(localStorage.getItem("city")); // get the data from local storage, key: city
-historyList.appendChild(historyListItem);
-// cityList.addEventListener("click", function () {
-//   // search the city again
-// });
+// historyListItem.id = "cityList";
+// historyListItem.setAttribute("class", "btn btn-light");
+// historyListItem.innerText = city; // get the data from local storage, key: city
+// historyList.appendChild(historyListItem);
 
 // // print information OLD VERSION
 // $(".city").text(JSON.parse(localStorage.getItem("city")) + ", " + JSON.parse(localStorage.getItem("country")));
