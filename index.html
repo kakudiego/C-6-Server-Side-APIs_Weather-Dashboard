@@ -21,7 +21,7 @@
     <!-- search and history section -->
     <section class="container shadow-0">
       <div class="row">
-        <div class="col-sm-4 shadow-0 border text-center" id="busca">
+        <div class="col-sm-4 shadow-0 text-center" id="busca">
           <div class="row">
             <h2 class="bg-primary text-white">Search for a City</h2>
             <input class="form-control-md" id="search" type="text" autofocus="true" required placeholder="City" onkeyup="stoppedTyping()" />
@@ -33,16 +33,20 @@
             <button class="btn btn-primary" onclick="deleteCity()">Delete City <i class="fa-regular fa-trash-can fa-lg"></i></button>
           </div>
         </div>
-        <div class="col-sm-8 shadow-0">
-          <div>
-            <p class="date" id="day0"></p>
-            <h4 class="city">New York, <span>US</span></h4>
-            <p id="description"></p>
-            <img id="day0icon" src="http://openweathermap.org/img/wn/10d@2x.png" class="" />
-            <p class="temp" id="day0temp">Temp: <strong>??</strong></p>
-            <p class="himidity" id="day0humidity">Humidity: <strong>??</strong></p>
-            <p class="wind" id="day0wind">Wind: <strong>??</strong></p>
-            <p class="uv-index" id="day0uvi">UV Index: <strong>??</strong></p>
+        <div class="col-sm-8 shadow-0 container">
+          <div class="row">
+            <div>
+              <p class="date col" id="day0"></p>
+              <h4 class="city">New York, <span>US</span></h4>
+              <p id="description"></p>
+              <img id="day0icon" src="http://openweathermap.org/img/wn/10d@2x.png" class="" />
+            </div>
+            <div class="col">
+              <p class="temp" id="day0temp">Temp: <strong>??</strong></p>
+              <p class="himidity" id="day0humidity">Humidity: <strong>??</strong></p>
+              <p class="wind" id="day0wind">Wind: <strong>??</strong></p>
+              <p class="uv-index" id="day0uvi">UV Index: <strong>??</strong></p>
+            </div>
           </div>
         </div>
       </div>
@@ -52,42 +56,41 @@
     <section class="container">
       <div class="row shadow-0">
         <h3 class="bg-primary text-white">Forecast next 5 days</h3>
-        <div class="col shadow-0 border">
+        <div class="col shadow-0">
           <p class="date" id="day1">01/01/22</p>
           <img id="day1icon" src="http://openweathermap.org/img/wn/10d@2x.png" class="" />
           <p class="temp" id="day1temp">Temp: <strong>??</strong></p>
           <p class="himidity" id="day1humidity">Humidity: <strong>??</strong></p>
           <p class="wind" id="day1wind">Wind: <strong>??</strong></p>
         </div>
-        <div class="col shadow-0 border">
+        <div class="col shadow-0">
           <p class="date" id="day2">01/01/22</p>
           <img id="day2icon" src="http://openweathermap.org/img/wn/10d@2x.png" class="" />
           <p class="temp" id="day2temp">Temp: <strong>??</strong></p>
           <p class="himidity" id="day2humidity">Humidity: <strong>??</strong></p>
           <p class="wind" id="day2wind">Wind: <strong>??</strong></p>
         </div>
-        <div class="col shadow-0 border">
+        <div class="col shadow-0">
           <p class="date" id="day3">01/01/22</p>
           <img id="day3icon" src="http://openweathermap.org/img/wn/10d@2x.png" class="" />
           <p class="temp" id="day3temp">Temp: <strong>??</strong></p>
           <p class="himidity" id="day3humidity">Humidity: <strong>??</strong></p>
           <p class="wind" id="day3wind">Wind: <strong>??</strong></p>
         </div>
-        <div class="col shadow-0 border">
+        <div class="col shadow-0">
           <p class="date" id="day4">01/01/22</p>
           <img id="day4icon" src="http://openweathermap.org/img/wn/10d@2x.png" class="" />
           <p class="temp" id="day4temp">Temp: <strong>??</strong></p>
           <p class="himidity" id="day4humidity">Humidity: <strong>??</strong></p>
           <p class="wind" id="day4wind">Wind: <strong>??</strong></p>
         </div>
-        <div class="col shadow-0 border">
+        <div class="col shadow-0">
           <p class="date" id="day5">01/01/22</p>
           <img id="day5icon" src="http://openweathermap.org/img/wn/10d@2x.png" class="" />
           <p class="temp" id="day5temp">Temp: <strong>??</strong></p>
           <p class="himidity" id="day5humidity">Humidity: <strong>??</strong></p>
           <p class="wind" id="day5wind">Wind: <strong>??</strong></p>
         </div>
-        <h4>* UV Index may takes a few seconds to load *</h4>
       </div>
     </section>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>

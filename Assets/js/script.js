@@ -25,11 +25,13 @@ var lat = JSON.parse(localStorage.getItem("lat"));
 var lon = JSON.parse(localStorage.getItem("lon"));
 
 var oneDay = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial" + "&appid=61763921a1722d721341f9896cdced9f";
-var uvi = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly&appid=61763921a1722d721341f9896cdced9f";
 var fiveDays = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial" + "&appid=61763921a1722d721341f9896cdced9f";
 
 // UVI section
-var getUVI = function () {
+// function call inside getWeather function
+var getUVI = function (lat, lon) {
+  var uvi = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly&appid=61763921a1722d721341f9896cdced9f";
+
   fetch(uvi).then(function (response) {
     response.json().then(function (data) {
       // localStorage.setItem("uvi", JSON.stringify(data.current.uvi));
@@ -42,6 +44,9 @@ var getUVI = function () {
   });
 };
 
+// get today weather, lat and lon
+// call getUVI function
+// print today weather
 var getWeather = function () {
   fetch(oneDay)
     .then(function (response) {
@@ -75,6 +80,7 @@ var getWeather = function () {
           // console.log("temp = " + data.main.temp + " F");
           // console.log("humidity = " + data.main.humidity + " %");
           // console.log("wind = " + data.wind.speed + " MPH");
+          getUVI(data.coord.lat, data.coord.lon);
           // console.log("lat = " + data.coord.lat);
           // console.log("lon = " + data.coord.lon);
           return;
@@ -176,10 +182,6 @@ $("#day5").text(date.addDays(5).toLocaleDateString("en-US"));
 saveBtn.addEventListener("click", function (event) {
   event.preventDefault();
   localStorage.setItem("city", JSON.stringify(searchCity.value));
-  getWeather();
-  nextFive();
-  getUVI();
-
   location.reload();
 });
 
@@ -245,4 +247,4 @@ historyList.appendChild(historyListItem);
 
 getWeather();
 nextFive();
-getUVI();
+// getUVI();
