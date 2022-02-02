@@ -11,14 +11,12 @@ $(document).ready(function () {
 });
 
 // select search section
+var form = document.querySelector("form");
 var saveBtn = document.querySelector("#searchbtn");
-var searchCity = document.querySelector("#search");
-var cityList = document.querySelector("#cityList");
-var searchHistory = [];
-
-// select ul to display search history
-var historyList = document.querySelector("#historyList");
-// var historyListItem = document.createElement("button");
+var searchCity = document.querySelector("#search"); // input
+var cityList = document.querySelector("#cityList"); // for the new added city
+var historyList = document.querySelector("#historyList"); // ul
+var historyListItem = document.createElement("button");
 
 // get the item from local storage and later use it to fetch city and uvi
 var city = JSON.parse(localStorage.getItem("city"));
@@ -117,27 +115,6 @@ var getWeather = function () {
 var nextFive = function (city) {
   fetch(fiveDays).then(function (response) {
     response.json().then(function (data) {
-      // // save local storage
-      // localStorage.setItem("day1temp", JSON.stringify(data.list[0].main.temp));
-      // localStorage.setItem("day1humidity", JSON.stringify(data.list[0].main.humidity));
-      // localStorage.setItem("day1wind", JSON.stringify(data.list[0].wind.speed));
-
-      // localStorage.setItem("day2temp", JSON.stringify(data.list[1].main.temp));
-      // localStorage.setItem("day2humidity", JSON.stringify(data.list[1].main.humidity));
-      // localStorage.setItem("day2wind", JSON.stringify(data.list[1].wind.speed));
-
-      // localStorage.setItem("day3temp", JSON.stringify(data.list[2].main.temp));
-      // localStorage.setItem("day3humidity", JSON.stringify(data.list[2].main.humidity));
-      // localStorage.setItem("day3wind", JSON.stringify(data.list[2].wind.speed));
-
-      // localStorage.setItem("day4temp", JSON.stringify(data.list[3].main.temp));
-      // localStorage.setItem("day4humidity", JSON.stringify(data.list[3].main.humidity));
-      // localStorage.setItem("day4wind", JSON.stringify(data.list[3].wind.speed));
-
-      // localStorage.setItem("day5temp", JSON.stringify(data.list[4].main.temp));
-      // localStorage.setItem("day5humidity", JSON.stringify(data.list[4].main.humidity));
-      // localStorage.setItem("day5wind", JSON.stringify(data.list[4].wind.speed));
-
       // add weather icon 5 days
       $("#day1icon").attr("src", "https://openweathermap.org/img/wn/" + data.list[0].weather[0].icon + "@2x.png");
       $("#day2icon").attr("src", "https://openweathermap.org/img/wn/" + data.list[1].weather[0].icon + "@2x.png");
@@ -197,11 +174,21 @@ $("#day5").text(date.addDays(5).toLocaleDateString("en-US"));
 //
 
 //
+// var makeCityList = function (text) {
+//   var cityButton = document.createElement("button");
+//   cityButton.innerText = text;
+//   historyList.appendChild(cityButton);
+// };
+
+// saveBtn.addEventListener("click", function (event) {
+//   event.preventDefault();
+
+//   makeCityList(input.value);
+//   input.value = "";
+// });
 
 // Local Storage section
 // keep data after refresh page
-var cityArray = [];
-
 saveBtn.addEventListener("click", function (event) {
   event.preventDefault();
   localStorage.setItem("city", JSON.stringify(searchCity.value));
@@ -233,38 +220,15 @@ function deleteCity() {
 }
 
 // add search history as clickable button
-// historyListItem.id = "cityList";
-// historyListItem.setAttribute("class", "btn btn-light");
-// historyListItem.innerText = city; // get the data from local storage, key: city
-// historyList.appendChild(historyListItem);
+historyListItem.id = "cityList";
+historyListItem.setAttribute("class", "btn btn-light");
+historyListItem.innerText = city; // get the data from local storage, key: city
+historyList.appendChild(historyListItem);
 
-// // print information OLD VERSION
-// $(".city").text(JSON.parse(localStorage.getItem("city")) + ", " + JSON.parse(localStorage.getItem("country")));
-// $("#day0temp").text("Temp: " + JSON.parse(localStorage.getItem("day0temp")) + " \u00B0F");
-// $("#day0humidity").text("Humidity: " + JSON.parse(localStorage.getItem("day0humidity")) + "%");
-// $("#day0wind").text("Wind: " + JSON.parse(localStorage.getItem("day0wind")) + " MPH");
-// $("#day0uvi").text("UV Index: " + JSON.parse(localStorage.getItem("uvi")));
-
-// next 5 days
-// $("#day1temp").text("Temp: " + JSON.parse(localStorage.getItem("day1temp")) + " \u00B0F");
-// $("#day1humidity").text("Humidity: " + JSON.parse(localStorage.getItem("day1humidity")) + "%");
-// $("#day1wind").text("Wind: " + JSON.parse(localStorage.getItem("day1wind")) + " MPH");
-
-// $("#day2temp").text("Temp: " + JSON.parse(localStorage.getItem("day2temp")) + " \u00B0F");
-// $("#day2humidity").text("Humidity: " + JSON.parse(localStorage.getItem("day2humidity")) + "%");
-// $("#day2wind").text("Wind: " + JSON.parse(localStorage.getItem("day2wind")) + " MPH");
-
-// $("#day3temp").text("Temp: " + JSON.parse(localStorage.getItem("day3temp")) + " \u00B0F");
-// $("#day3humidity").text("Humidity: " + JSON.parse(localStorage.getItem("day3humidity")) + "%");
-// $("#day3wind").text("Wind: " + JSON.parse(localStorage.getItem("day3wind")) + " MPH");
-
-// $("#day4temp").text("Temp: " + JSON.parse(localStorage.getItem("day4temp")) + " \u00B0F");
-// $("#day4humidity").text("Humidity: " + JSON.parse(localStorage.getItem("day4humidity")) + "%");
-// $("#day4wind").text("Wind: " + JSON.parse(localStorage.getItem("day4wind")) + " MPH");
-
-// $("#day5temp").text("Temp: " + JSON.parse(localStorage.getItem("day5temp")) + " \u00B0F");
-// $("#day5humidity").text("Humidity: " + JSON.parse(localStorage.getItem("day5humidity")) + "%");
-// $("#day5wind").text("Wind: " + JSON.parse(localStorage.getItem("day5wind")) + " MPH");
+historyList.addEventListener("click", function () {
+  getWeather();
+  nextFive();
+});
 
 getWeather();
 nextFive();
