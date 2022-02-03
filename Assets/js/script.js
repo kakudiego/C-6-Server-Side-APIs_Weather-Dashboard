@@ -2,6 +2,7 @@
 // show current and next 5 days weather
 // display city name + date + weather icon + temp + humidity + wind speed + uv index
 // weather condition represented by color (favorable, moderate, or severe)
+// I'm mixing JavaScript and jQuery
 
 $(document).ready(function () {
   // getUVI();
@@ -20,11 +21,6 @@ var historyListItem = document.createElement("button");
 
 // get the item from local storage and later use it to fetch city and uvi
 var city = JSON.parse(localStorage.getItem("city"));
-// var lat = JSON.parse(localStorage.getItem("lat"));
-// var lon = JSON.parse(localStorage.getItem("lon"));
-
-var oneDay = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial" + "&appid=61763921a1722d721341f9896cdced9f";
-var fiveDays = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial" + "&appid=61763921a1722d721341f9896cdced9f";
 
 // UVI section
 // function using 2 parameters, call inside getWeather function
@@ -67,20 +63,12 @@ var getUVI = function (lat, lon) {
 // call getUVI function
 // print today weather
 var getWeather = function () {
+  var oneDay = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial" + "&appid=61763921a1722d721341f9896cdced9f";
+
   fetch(oneDay)
     .then(function (response) {
       if (response.ok) {
         response.json().then(function (data) {
-          // localStorage.setItem("lat", JSON.stringify(data.coord.lat));
-          // localStorage.setItem("lon", JSON.stringify(data.coord.lon));
-          // localStorage.setItem("city", JSON.stringify(data.name));
-          // localStorage.setItem("day0weather", JSON.stringify(data));
-          // localStorage.setItem("country", JSON.stringify(data.sys.country));
-          // localStorage.setItem("day0temp", JSON.stringify(data.main.temp));
-          // localStorage.setItem("day0humidity", JSON.stringify(data.main.humidity));
-          // localStorage.setItem("day0wind", JSON.stringify(data.wind.speed));
-          // localStorage.setItem("day0icon", JSON.stringify(data.weather[0].icon));
-
           // print weather for today
           $(".city").text(data.name + ", " + data.sys.country);
           $("#description").text(data.weather[0].description);
@@ -112,7 +100,9 @@ var getWeather = function () {
 };
 
 // next 5 days function
-var nextFive = function (city) {
+var nextFive = function () {
+  var fiveDays = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial" + "&appid=61763921a1722d721341f9896cdced9f";
+
   fetch(fiveDays).then(function (response) {
     response.json().then(function (data) {
       // add weather icon 5 days
@@ -173,34 +163,27 @@ $("#day4").text(date.addDays(4).toLocaleDateString("en-US"));
 $("#day5").text(date.addDays(5).toLocaleDateString("en-US"));
 //
 
-//
-// var makeCityList = function (text) {
-//   var cityButton = document.createElement("button");
-//   cityButton.innerText = text;
-//   historyList.appendChild(cityButton);
-// };
-
-// saveBtn.addEventListener("click", function (event) {
-//   event.preventDefault();
-
-//   makeCityList(input.value);
-//   input.value = "";
-// });
-
 // Local Storage section
 // keep data after refresh page
 saveBtn.addEventListener("click", function (event) {
   event.preventDefault();
   localStorage.setItem("city", JSON.stringify(searchCity.value));
 
-  location.reload();
-});
+  var cityInput = document.querySelector("#search").value; // or $("#search").val(); //saves the city that has been entered
+  var allCities = []; // Array to hold all searched all cities
 
-$("#search").keypress(function (event) {
-  if (event.keyCode === 13) {
-    event.preventDefault();
-    $("#searchbtn").click();
-  }
+  allCities = JSON.parse(localStorage.getItem("allCities")) || []; // Get cities
+  allCities.push(cityInput); // pushes new cities entered to array
+  localStorage.setItem("allCities", JSON.stringify(allCities)); //saves city input to local storage
+
+  // add Enter button functionality
+  $("#search").keypress(function (event) {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      $("#searchbtn").click();
+    }
+  });
+  location.reload();
 });
 
 // disable search button if input is empty, not the perfect fix
@@ -215,20 +198,43 @@ function stoppedTyping() {
 
 // delete task button
 function deleteCity() {
-  localStorage.removeItem("city"); // just the key: city
+  localStorage.removeItem("allCities"); // just the key: city
   location.reload();
 }
 
-// add search history as clickable button
-historyListItem.id = "cityList";
-historyListItem.setAttribute("class", "btn btn-light");
-historyListItem.innerText = city; // get the data from local storage, key: city
-historyList.appendChild(historyListItem);
+//  Function to retrieve the stored input that was saved in each input
+function showLastCity() {
+  $("#historyList").empty(); // empties out previous array
+  var cityFromStorage = JSON.parse(localStorage.getItem("allCities")) || []; // Makes all cities searched a string
+  var arrayLength = cityFromStorage.length; // limits length of array
 
-historyList.addEventListener("click", function () {
-  getWeather();
-  nextFive();
-});
+  for (var i = 0; i < arrayLength; i++) {
+    // Loop so it prepends all cities within the length of the array
+    var cityNameFromArray = cityFromStorage[i].toUpperCase(); // save to array and all upper case
+
+    // console.log(cityFromStorage);
+
+    $("#historyList").append(
+      "<div>" +
+        // City text
+        "<button class='btn btn-light showCityAgain'>" +
+        cityNameFromArray +
+        "</button>"
+    );
+  } // end of loop
+} // end of showLastCity function
+showLastCity();
+
+// show cities on click
+$(".showCityAgain").on("click", function (event) {
+  event.preventDefault();
+  var lastCity = $(this).text();
+
+  console.log(lastCity);
+
+  getWeather(lastCity);
+  nextFive(lastCity);
+}); // end of city buttons on click
 
 getWeather();
 nextFive();
