@@ -13,14 +13,14 @@ $(document).ready(function () {
 
 // select search section
 var form = document.querySelector("form");
-var saveBtn = document.querySelector("#searchbtn");
+var searchBtn = document.querySelector("#searchbtn");
 var searchCity = document.querySelector("#search"); // input
 var cityList = document.querySelector("#cityList"); // for the new added city
 var historyList = document.querySelector("#historyList"); // ul
 var historyListItem = document.createElement("button");
 
 // get the item from local storage and later use it to fetch city and uvi
-var city = JSON.parse(localStorage.getItem("city"));
+var localStorageCity = JSON.parse(localStorage.getItem("city"));
 
 // UVI section
 // function using 2 parameters, call inside getWeather function
@@ -62,8 +62,8 @@ var getUVI = function (lat, lon) {
 // get today weather, lat and lon
 // call getUVI function
 // print today weather
-var getWeather = function () {
-  var oneDay = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial" + "&appid=61763921a1722d721341f9896cdced9f";
+var getWeather = function (cityInput) {
+  var oneDay = "https://api.openweathermap.org/data/2.5/weather?q=" + cityInput + "&units=imperial" + "&appid=61763921a1722d721341f9896cdced9f";
 
   fetch(oneDay)
     .then(function (response) {
@@ -100,8 +100,8 @@ var getWeather = function () {
 };
 
 // next 5 days function
-var nextFive = function () {
-  var fiveDays = "https://api.openweathermap.org/data/2.5/forecast?q=" + city + "&units=imperial" + "&appid=61763921a1722d721341f9896cdced9f";
+var nextFive = function (cityInput) {
+  var fiveDays = "https://api.openweathermap.org/data/2.5/forecast?q=" + cityInput + "&units=imperial" + "&appid=61763921a1722d721341f9896cdced9f";
 
   fetch(fiveDays).then(function (response) {
     response.json().then(function (data) {
@@ -165,12 +165,14 @@ $("#day5").text(date.addDays(5).toLocaleDateString("en-US"));
 
 // Local Storage section
 // keep data after refresh page
-saveBtn.addEventListener("click", function (event) {
+
+var allCities = []; // Array to hold all searched all cities
+
+searchBtn.addEventListener("click", function (event) {
   event.preventDefault();
   localStorage.setItem("city", JSON.stringify(searchCity.value));
 
   var cityInput = document.querySelector("#search").value; // or $("#search").val(); //saves the city that has been entered
-  var allCities = []; // Array to hold all searched all cities
 
   allCities = JSON.parse(localStorage.getItem("allCities")) || []; // Get cities
   allCities.push(cityInput); // pushes new cities entered to array
@@ -183,6 +185,9 @@ saveBtn.addEventListener("click", function (event) {
       $("#searchbtn").click();
     }
   });
+  getWeather();
+  nextFive();
+
   location.reload();
 });
 
@@ -197,10 +202,18 @@ function stoppedTyping() {
 }
 
 // delete task button
+// call inside HTML
 function deleteCity() {
   localStorage.removeItem("allCities"); // just the key: city
   location.reload();
 }
+
+// delete task button - other option
+$("#deleteCity").click(function (e) {
+  e.preventDefault();
+  localStorage.removeItem("allCities"); // just the key: city
+  location.reload();
+});
 
 //  Function to retrieve the stored input that was saved in each input
 function showLastCity() {
@@ -214,6 +227,7 @@ function showLastCity() {
 
     // console.log(cityFromStorage);
 
+    // append list of search history
     $("#historyList").append(
       "<div>" +
         // City text
@@ -221,8 +235,8 @@ function showLastCity() {
         cityNameFromArray +
         "</button>"
     );
-  } // end of loop
-} // end of showLastCity function
+  }
+}
 showLastCity();
 
 // show cities on click
@@ -230,12 +244,11 @@ $(".showCityAgain").on("click", function (event) {
   event.preventDefault();
   var lastCity = $(this).text();
 
-  console.log(lastCity);
+  // console.log(lastCity);
 
   getWeather(lastCity);
   nextFive(lastCity);
-}); // end of city buttons on click
+});
 
-getWeather();
-nextFive();
-// getUVI();
+getWeather(localStorageCity);
+nextFive(localStorageCity);
