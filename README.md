@@ -1,4 +1,4 @@
-# 06 Server-Side APIs: Weather Dashboard
+# C-6-Server-Side-APIs_Weather-Dashboard
 
 Use the [OpenWeather One Call API](https://openweathermap.org/api/one-call-api) to retrieve weather data.
 
