@@ -71,3 +71,7 @@ form {
 #deleteCity {
   margin-bottom: 10px;
 }
+
+.showCityAgain {
+  margin: 5px 0;
+}

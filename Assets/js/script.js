@@ -165,7 +165,6 @@ $("#day5").text(date.addDays(5).toLocaleDateString("en-US"));
 
 // Local Storage section
 // keep data after refresh page
-
 var allCities = []; // Array to hold all searched all cities
 
 searchBtn.addEventListener("click", function (event) {
@@ -239,7 +238,7 @@ function showLastCity() {
 }
 showLastCity();
 
-// show cities on click
+// show search cities on click, after creating the list/button above
 $(".showCityAgain").on("click", function (event) {
   event.preventDefault();
   var lastCity = $(this).text();
